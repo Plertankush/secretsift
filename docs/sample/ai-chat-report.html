@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src &#x27;none&#x27;; style-src &#x27;unsafe-inline&#x27;; img-src data:; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;"><meta name="referrer" content="no-referrer"><title>secretsift report 6f5582d718c8</title><style>
+:root{
+  --bg:#f1f1f2;--card:#fff;--ink:#111113;--ink2:#55555c;--muted:#8a8a92;--line:#e7e7ea;
+  --soft:#f5f5f6;--fill:#111113;--on-fill:#fff;--shadow:0 18px 40px -22px rgba(0,0,0,.28);
+  --mark-a:#e6e6e9;--mark-b:#fff;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#09090a;--card:#141416;--ink:#f3f3f5;--ink2:#b4b4bb;--muted:#82828a;--line:#27272b;
+  --soft:#1b1b1e;--fill:#f3f3f5;--on-fill:#09090a;--shadow:0 18px 40px -22px rgba(0,0,0,.8);
+  --mark-a:#222226;--mark-b:#141416;color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#09090a;--card:#141416;--ink:#f3f3f5;--ink2:#b4b4bb;--muted:#82828a;--line:#27272b;
+  --soft:#1b1b1e;--fill:#f3f3f5;--on-fill:#09090a;--shadow:0 18px 40px -22px rgba(0,0,0,.8);
+  --mark-a:#222226;--mark-b:#141416;color-scheme:dark;}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+  sans-serif;-webkit-font-smoothing:antialiased;
+  padding-block:16px 40px;
+  padding-left:max(14px,env(safe-area-inset-left,0px));
+  padding-right:max(14px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1080px;margin:0 auto;display:grid;gap:14px}
+.wrap>*{min-width:0}
+h1,h2,h3,p{margin:0}
+h2{font-size:1.15rem;letter-spacing:-.01em;font-weight:650}
+h3{font-size:1rem}
+.mono,pre,code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.card{background:var(--card);border-radius:28px;padding:28px;box-shadow:var(--shadow);
+  border:1px solid var(--line)}
+a{color:inherit}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--ink);outline-offset:3px;
+  border-radius:8px}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 14px 12px 22px;border-radius:999px}
+.brand{font-weight:700;text-decoration:none;letter-spacing:-.02em}
+.links{display:flex;gap:22px;font-size:.88rem;color:var(--ink2)}
+.links a{text-decoration:none}
+.links a:hover{color:var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;color:var(--ink2);
+  background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+.chip.run{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.hero{text-align:center;padding:44px 24px 36px;display:grid;justify-items:center;gap:18px}
+.hero h1{font-size:clamp(2.3rem,8.4vw,5rem);line-height:.98;letter-spacing:-.05em;
+  font-weight:600;max-width:15ch;text-wrap:balance}
+.sub{color:var(--ink2);max-width:46ch;text-wrap:balance}
+.pill{display:inline-block;padding:9px 20px;border-radius:999px;font-weight:600;font-size:.88rem;
+  background:var(--fill);color:var(--on-fill);border:1px solid var(--fill)}
+.pill.passed{background:transparent;color:var(--ink);border-color:var(--ink)}
+.pill.warned{background:transparent;color:var(--ink);border:1px dashed var(--ink)}
+.pill.errored{background:var(--ink2);border-color:var(--ink2);color:var(--card)}
+.clock{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:8px;margin-top:6px;
+  border-radius:26px;background:linear-gradient(#2a2a2c,#121213);
+  box-shadow:0 22px 40px -18px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.12)}
+.tile{min-width:104px;padding:14px 18px 10px;border-radius:18px;color:#fff;text-align:center;
+  background:linear-gradient(#303033,#1b1b1d);box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+.tile b{display:block;font-size:2.1rem;line-height:1.1;letter-spacing:-.03em;font-weight:650;
+  font-variant-numeric:tabular-nums}
+.tile span{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#a6a6ad}
+.dark{color:#fff;border-color:#232326;
+  background:radial-gradient(120% 60% at 50% 0%,#3d3d41 0%,#101011 58%,#09090a 100%);
+  --passed:#6d6d75;--warned:#a2a2aa;--failed:#fff;--errored:#d2d2d8;--skipped:#37373b;
+  --sev-critical:#fff;--sev-high:#d6d6db;--sev-medium:#a4a4ac;--sev-low:#74747c;--sev-info:#4b4b51;
+  --track:#2a2a2e;--bar:#fff;--c-ink:#fff;--c-ink2:#b9b9c1;--c-muted:#8b8b93}
+.dark h2{color:#fff;margin-bottom:14px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:26px 34px}
+.grid3>*{min-width:0}
+.summary{display:flex;flex-wrap:wrap;gap:18px 26px;align-items:center}
+.legend{list-style:none;margin:0;padding:0;display:grid;gap:6px;min-width:0;
+  color:var(--c-ink2);font-size:.9rem}
+.legend li{display:flex;align-items:center;gap:8px}
+.sw{width:11px;height:11px;border-radius:3px;display:inline-block;flex:none;
+  border:1px solid rgba(255,255,255,.25)}
+.num{font-variant-numeric:tabular-nums;margin-left:auto;padding-left:16px;font-weight:650;
+  color:var(--c-ink)}
+svg{max-width:100%;height:auto;display:block}
+.donut-track{fill:none;stroke:var(--track)}
+.donut-seg{fill:none}
+.donut-n{font-size:22px;font-weight:700;fill:#fff;text-anchor:middle}
+.donut-l{font-size:9px;fill:var(--c-muted);text-anchor:middle}
+.bar-label{font-size:12px;fill:var(--c-ink2)}
+.bar-val{font-size:12px;fill:var(--c-ink);font-weight:650}
+.bar-track{fill:var(--track)}
+.bar-cat{fill:var(--bar)}
+.note{color:var(--muted);font-size:.9rem}
+.dark .note{color:var(--c-muted)}
+.sec-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin-bottom:14px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);
+  font-weight:600}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+td.name{overflow-wrap:anywhere;min-width:160px;font-weight:600}
+tr:last-child td{border-bottom:0}
+.st{display:inline-block;font-weight:600;font-size:.8rem;padding:3px 11px;border-radius:999px;
+  border:1px solid var(--ink)}
+.st::before{margin-right:6px}
+.st.failed{background:var(--fill);color:var(--on-fill)}
+.st.failed::before{content:"\25A0"}
+.st.passed::before{content:"\2713"}
+.st.warned{border-style:dashed}.st.warned::before{content:"\25B2"}
+.st.errored{background:var(--soft);border-style:double;border-width:3px}
+.st.errored::before{content:"\2715"}
+.st.skipped{border-color:var(--line);color:var(--muted)}.st.skipped::before{content:"\2013"}
+.cards{display:grid;gap:14px}
+.finding{display:grid;gap:18px;padding:24px}
+.card-head{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.fid{font-weight:700;font-size:1.15rem;letter-spacing:-.01em}
+.tag{font-size:.78rem;color:var(--ink2);background:var(--soft);border:1px solid var(--line);
+  border-radius:999px;padding:3px 11px}
+.finding dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px 22px;
+  margin:0}
+.finding dl>div,.meta>div{min-width:0}
+dt{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;
+  margin-bottom:2px}
+dd{margin:0;overflow-wrap:anywhere}
+pre{margin:6px 0 0;padding:16px 18px;background:#0c0c0d;color:#f1f1f3;border-radius:16px;
+  white-space:pre-wrap;overflow-wrap:anywhere;font-size:.85rem}
+details>summary{cursor:pointer;font-weight:600;padding:6px 0}
+.fix{margin:6px 0 0;padding:14px 16px;background:var(--soft);border-radius:16px;
+  overflow-wrap:anywhere;border:1px solid var(--line)}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px 22px;margin:0}
+ul.lim{margin:10px 0 0;padding-left:20px;display:grid;gap:8px;color:var(--ink2)}
+ul.lim li{overflow-wrap:anywhere}
+.empty{color:var(--muted)}
+.foot{overflow:hidden;padding-bottom:0;display:grid;gap:6px}
+.foot p{color:var(--muted);font-size:.85rem;max-width:60ch}
+.mark{font-size:clamp(3.4rem,19vw,12.5rem);font-weight:700;letter-spacing:-.06em;line-height:.82;
+  margin:22px 0 -.1em;user-select:none;white-space:nowrap;overflow:hidden;color:transparent;
+  background:linear-gradient(var(--mark-a),var(--mark-b) 88%);
+  -webkit-background-clip:text;background-clip:text}
+@media (max-width:640px){
+  .links{display:none}
+  .card{padding:20px;border-radius:24px}
+  .hero{padding:32px 16px 26px}
+  .tile{min-width:calc(50% - 6px);flex:1 1 calc(50% - 6px)}
+  thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  table,tbody,tr,td,caption{display:block;width:100%}
+  tr{padding:12px 0;border-bottom:1px solid var(--line)}
+  tr:last-child{border-bottom:0}
+  td{display:flex;justify-content:space-between;gap:14px;border:0;padding:5px 0;text-align:right}
+  td::before{content:attr(data-label);color:var(--muted);font-size:.72rem;
+    text-transform:uppercase;letter-spacing:.09em;text-align:left;flex:none;padding-top:3px}
+  td.name{display:block;text-align:left;min-width:0}
+  td.name::before{display:none}
+}
+@media print{body{background:#fff}.card{box-shadow:none}.clock{box-shadow:none}}
+</style></head><body><main class="wrap"><nav class="card nav" aria-label="Report sections"><a class="brand" href="#top">secretsift</a><div class="links"><a href="#overview">Overview</a><a href="#scenarios">Scenarios</a><a href="#findings">Findings</a><a href="#coverage">Coverage</a></div><span class="chip run">run 6f5582d718</span></nav><header class="card hero" id="top"><span class="chip">Privacy leak rehearsal &middot; seed 7</span><h1>5 privacy leaks found.</h1><p class="sub">8 scenarios: 4 passed, 4 failed, 0 warned, 0 errored, 0 skipped; 5 findings</p><span class="pill failed">FAILED</span><div class="clock" role="group" aria-label="Run summary"><div class="tile"><b>4</b><span>Passed</span></div><div class="tile"><b>4</b><span>Not clean</span></div><div class="tile"><b>5</b><span>Findings</span></div><div class="tile"><b>10 ms</b><span>Duration</span></div></div><dl class="meta" style="width:100%;margin-top:18px;text-align:left"><div><dt>Run</dt><dd>6f5582d718c8</dd></div><div><dt>Started</dt><dd>2026-10-26T01:03:09+00:00</dd></div><div><dt>Duration</dt><dd>10 ms</dd></div><div><dt>Seed</dt><dd>7</dd></div><div><dt>Version</dt><dd>secretsift 0.1.0</dd></div><div><dt>Config</dt><dd>examples/ai_chat_app/secretsift.yaml</dd></div></dl></header><section class="card dark" id="overview"><h2>Scenario outcomes</h2><div class="grid3"><div><div class="summary"><svg viewBox="0 0 120 120" width="150" height="150" role="img" aria-label="Scenario outcomes: 4 passed, 0 warned, 4 failed, 0 errored, 0 skipped"><title>Scenario outcomes</title><circle class="donut-track" cx="60" cy="60" r="40.0" stroke-width="14"/><circle class="donut-seg" cx="60" cy="60" r="40.0" stroke-width="14" stroke="var(--passed)" stroke-dasharray="124.16 251.33" stroke-dashoffset="-0.00" transform="rotate(-90 60 60)"/><circle class="donut-seg" cx="60" cy="60" r="40.0" stroke-width="14" stroke="var(--failed)" stroke-dasharray="124.16 251.33" stroke-dashoffset="-125.66" transform="rotate(-90 60 60)"/><text class="donut-n" x="60" y="62">8</text><text class="donut-l" x="60" y="76">scenarios</text></svg><ul class="legend"><li><span class="sw" style="background:var(--passed)"></span>Passed<span class="num">4</span></li><li><span class="sw" style="background:var(--warned)"></span>Warned<span class="num">0</span></li><li><span class="sw" style="background:var(--failed)"></span>Failed<span class="num">4</span></li><li><span class="sw" style="background:var(--errored)"></span>Errored<span class="num">0</span></li><li><span class="sw" style="background:var(--skipped)"></span>Skipped<span class="num">0</span></li></ul></div></div><div><h2>Findings by category</h2><svg viewBox="0 0 340 134" role="img" aria-label="Findings by category"><title>Findings by category</title><text class="bar-label" x="0" y="17">logging</text><rect class="bar-track" x="92" y="6" width="190" height="12" rx="3"/><rect x="92" y="6" width="190.0" height="12" rx="3" style="fill:var(--bar)"/><text class="bar-val" x="292" y="17">2</text><text class="bar-label" x="0" y="43">network</text><rect class="bar-track" x="92" y="32" width="190" height="12" rx="3"/><text class="bar-val" x="292" y="43">0</text><text class="bar-label" x="0" y="69">ai context</text><rect class="bar-track" x="92" y="58" width="190" height="12" rx="3"/><rect x="92" y="58" width="95.0" height="12" rx="3" style="fill:var(--bar)"/><text class="bar-val" x="292" y="69">1</text><text class="bar-label" x="0" y="95">response</text><rect class="bar-track" x="92" y="84" width="190" height="12" rx="3"/><rect x="92" y="84" width="190.0" height="12" rx="3" style="fill:var(--bar)"/><text class="bar-val" x="292" y="95">2</text><text class="bar-label" x="0" y="121">storage</text><rect class="bar-track" x="92" y="110" width="190" height="12" rx="3"/><text class="bar-val" x="292" y="121">0</text></svg></div><div><h2>Findings by severity</h2><svg viewBox="0 0 340 134" role="img" aria-label="Findings by severity"><title>Findings by severity</title><text class="bar-label" x="0" y="17">critical</text><rect class="bar-track" x="92" y="6" width="190" height="12" rx="3"/><text class="bar-val" x="292" y="17">0</text><text class="bar-label" x="0" y="43">high</text><rect class="bar-track" x="92" y="32" width="190" height="12" rx="3"/><text class="bar-val" x="292" y="43">0</text><text class="bar-label" x="0" y="69">medium</text><rect class="bar-track" x="92" y="58" width="190" height="12" rx="3"/><rect x="92" y="58" width="190.0" height="12" rx="3" style="fill:var(--sev-medium)"/><text class="bar-val" x="292" y="69">5</text><text class="bar-label" x="0" y="95">low</text><rect class="bar-track" x="92" y="84" width="190" height="12" rx="3"/><text class="bar-val" x="292" y="95">0</text><text class="bar-label" x="0" y="121">info</text><rect class="bar-track" x="92" y="110" width="190" height="12" rx="3"/><text class="bar-val" x="292" y="121">0</text></svg></div></div></section><section class="card" id="scenarios"><h2 class="sec-head">Scenarios</h2><div class="scroll"><table><caption class="note" style="text-align:left">Outcome of each scenario</caption><thead><tr><th>Scenario</th><th>Category</th><th>Status</th><th class="n">Findings</th><th class="n">Events</th><th class="n">Duration</th></tr></thead><tbody><tr><td class="name" data-label="Scenario">prompt-leaky</td><td data-label="Category">ai_context</td><td data-label="Status"><span class="st failed">Failed</span></td><td class="n" data-label="Findings">1</td><td class="n" data-label="Events">4</td><td class="n" data-label="Duration">2 ms</td></tr><tr><td class="name" data-label="Scenario">prompt-fixed</td><td data-label="Category">ai_context</td><td data-label="Status"><span class="st passed">Passed</span></td><td class="n" data-label="Findings">0</td><td class="n" data-label="Events">4</td><td class="n" data-label="Duration">1 ms</td></tr><tr><td class="name" data-label="Scenario">echo-leaky</td><td data-label="Category">response</td><td data-label="Status"><span class="st failed">Failed</span></td><td class="n" data-label="Findings">1</td><td class="n" data-label="Events">4</td><td class="n" data-label="Duration">1 ms</td></tr><tr><td class="name" data-label="Scenario">echo-fixed</td><td data-label="Category">response</td><td data-label="Status"><span class="st passed">Passed</span></td><td class="n" data-label="Findings">0</td><td class="n" data-label="Events">4</td><td class="n" data-label="Duration">1 ms</td></tr><tr><td class="name" data-label="Scenario">error-leaky</td><td data-label="Category">response</td><td data-label="Status"><span class="st failed">Failed</span></td><td class="n" data-label="Findings">2</td><td class="n" data-label="Events">5</td><td class="n" data-label="Duration">2 ms</td></tr><tr><td class="name" data-label="Scenario">error-fixed</td><td data-label="Category">response</td><td data-label="Status"><span class="st passed">Passed</span></td><td class="n" data-label="Findings">0</td><td class="n" data-label="Events">5</td><td class="n" data-label="Duration">1 ms</td></tr><tr><td class="name" data-label="Scenario">stream-leaky</td><td data-label="Category">response</td><td data-label="Status"><span class="st failed">Failed</span></td><td class="n" data-label="Findings">1</td><td class="n" data-label="Events">18</td><td class="n" data-label="Duration">1 ms</td></tr><tr><td class="name" data-label="Scenario">stream-fixed</td><td data-label="Category">response</td><td data-label="Status"><span class="st passed">Passed</span></td><td class="n" data-label="Findings">0</td><td class="n" data-label="Events">8</td><td class="n" data-label="Duration">1 ms</td></tr></tbody></table></div></section><section id="findings"><div class="sec-head"><h2>Findings (5)</h2><span class="note">Evidence is redacted; severity reflects policy, not a real breach.</span></div><div class="cards"><article class="card finding" id="SS-CTX-001" aria-label="Finding SS-CTX-001"><div class="card-head"><h3 class="fid mono">SS-CTX-001</h3><span class="st failed">Denied</span><span class="tag">medium severity</span><span class="tag">ai context</span></div><dl><div><dt>Scenario</dt><dd>prompt-leaky</dd></div><div><dt>Destination</dt><dd>ai_request</dd></div><div><dt>Component</dt><dd>provider.safe_ai</dd></div><div><dt>Data</dt><dd>synthetic_email (sv_993f8a67), matched as raw</dd></div><div><dt>Confidence</dt><dd>exact; detected by ai_requests</dd></div><div><dt>Policy rule</dt><dd>default action</dd></div><div><dt>Expected</dt><dd>customer_email (synthetic_email) must not reach ai_request</dd></div><div><dt>Observed</dt><dd>customer_email observed in ai_request via provider.safe_ai</dd></div></dl><div><dt>Redacted evidence</dt><pre class="mono">user: Customer [REDACTED:sv_993f8a67] asks: Where is my order?</pre></div><div><dt>Remediation</dt><p class="fix">Remove sensitive values from prompts and context sent to the AI provider.</p></div></article><article class="card finding" id="SS-LOG-001" aria-label="Finding SS-LOG-001"><div class="card-head"><h3 class="fid mono">SS-LOG-001</h3><span class="st failed">Denied</span><span class="tag">medium severity</span><span class="tag">logging</span></div><dl><div><dt>Scenario</dt><dd>error-leaky</dd></div><div><dt>Destination</dt><dd>error_report</dd></div><div><dt>Component</dt><dd>provider.error_ai</dd></div><div><dt>Data</dt><dd>synthetic_email (sv_3ec6dd27), matched as raw</dd></div><div><dt>Confidence</dt><dd>exact; detected by errors</dd></div><div><dt>Policy rule</dt><dd>default action</dd></div><div><dt>Expected</dt><dd>customer_email (synthetic_email) must not reach error_report</dd></div><div><dt>Observed</dt><dd>customer_email observed in error_report via provider.error_ai</dd></div></dl><div><dt>Redacted evidence</dt><pre class="mono">...ing: user: Where is my order? (account: [REDACTED:sv_3ec6dd27])</pre></div><div><dt>Remediation</dt><p class="fix">Redact sensitive values from exception messages and tracebacks before they are raised.</p></div></article><article class="card finding" id="SS-LOG-002" aria-label="Finding SS-LOG-002"><div class="card-head"><h3 class="fid mono">SS-LOG-002</h3><span class="st failed">Denied</span><span class="tag">medium severity</span><span class="tag">logging</span></div><dl><div><dt>Scenario</dt><dd>error-leaky</dd></div><div><dt>Destination</dt><dd>error_report</dd></div><div><dt>Component</dt><dd>app.exception</dd></div><div><dt>Data</dt><dd>synthetic_email (sv_3ec6dd27), matched as raw</dd></div><div><dt>Confidence</dt><dd>exact; detected by errors</dd></div><div><dt>Policy rule</dt><dd>default action</dd></div><div><dt>Expected</dt><dd>customer_email (synthetic_email) must not reach error_report</dd></div><div><dt>Observed</dt><dd>customer_email observed in error_report via app.exception</dd></div></dl><div><dt>Redacted evidence</dt><pre class="mono">...ing: user: Where is my order? (account: [REDACTED:sv_3ec6dd27])\nTraceback (most recent call last):\n  F...</pre></div><div><dt>Remediation</dt><p class="fix">Redact sensitive values from exception messages and tracebacks before they are raised.</p></div></article><article class="card finding" id="SS-RSP-001" aria-label="Finding SS-RSP-001"><div class="card-head"><h3 class="fid mono">SS-RSP-001</h3><span class="st failed">Denied</span><span class="tag">medium severity</span><span class="tag">response</span></div><dl><div><dt>Scenario</dt><dd>echo-leaky</dd></div><div><dt>Destination</dt><dd>ai_output</dd></div><div><dt>Component</dt><dd>provider.echo_ai</dd></div><div><dt>Data</dt><dd>synthetic_email (sv_1b5e76b6), matched as raw</dd></div><div><dt>Confidence</dt><dd>exact; detected by ai_outputs</dd></div><div><dt>Policy rule</dt><dd>default action</dd></div><div><dt>Expected</dt><dd>customer_email (synthetic_email) must not reach ai_output</dd></div><div><dt>Observed</dt><dd>customer_email observed in ai_output via provider.echo_ai</dd></div></dl><div><dt>Redacted evidence</dt><pre class="mono">Where is my order? (account: [REDACTED:sv_1b5e76b6])</pre></div><div><dt>Remediation</dt><p class="fix">Prevent the model output or response from echoing sensitive values; filter it first.</p></div></article><article class="card finding" id="SS-RSP-001" aria-label="Finding SS-RSP-001"><div class="card-head"><h3 class="fid mono">SS-RSP-001</h3><span class="st failed">Denied</span><span class="tag">medium severity</span><span class="tag">response</span></div><dl><div><dt>Scenario</dt><dd>stream-leaky</dd></div><div><dt>Destination</dt><dd>ai_output</dd></div><div><dt>Component</dt><dd>provider.stream_ai</dd></div><div><dt>Data</dt><dd>synthetic_email (sv_bb80c1d5), matched as raw</dd></div><div><dt>Confidence</dt><dd>exact; detected by ai_outputs</dd></div><div><dt>Policy rule</dt><dd>default action</dd></div><div><dt>Expected</dt><dd>customer_email (synthetic_email) must not reach ai_output</dd></div><div><dt>Observed</dt><dd>customer_email observed in ai_output via provider.stream_ai</dd></div></dl><div><dt>Redacted evidence</dt><pre class="mono">Where is my order? (account: [REDACTED:sv_bb80c1d5])</pre></div><div><dt>Remediation</dt><p class="fix">Prevent the model output or response from echoing sensitive values; filter it first.</p></div></article></div></section><section class="card" id="coverage"><h2>Coverage and limitations</h2><dl class="meta" style="margin-top:14px"><div><dt>Inspectors active</dt><dd>logs, errors, http, ai_requests, ai_outputs, storage</dd></div><div><dt>Destinations observed</dt><dd>error_report, ai_request, ai_output, approved_test_input</dd></div><div><dt>Offline mode</dt><dd>yes</dd></div></dl><h3 style="margin-top:20px">Limitations</h3><ul class="lim"><li>Only instrumented channels are observed: logging, stdout/stderr, http.client traffic, sockets, wrapped AI providers and explicitly configured storage paths.</li><li>Uninstrumented services, subprocesses and other processes are not observed.</li><li>Kernel-level and non-Python network traffic is not seen.</li><li>When offline is false, hosted AI providers receive the synthetic test data.</li><li>Detection is exact plus the listed encoding variants only; other transformations of a value are not detected.</li></ul><p class="note" style="margin-top:12px">A clean result only covers what secretsift observed.</p></section><footer class="card foot"><p>Generated by secretsift. Self-contained file: no scripts, no external resources. Synthetic values never appear here.</p><div class="mark" aria-hidden="true">secretsift</div></footer></main></body></html>

@@ -1,0 +1,244 @@
+{
+  "$schema": "secretsift-report/1",
+  "schema_version": "1",
+  "run_id": "6f5582d718c8",
+  "tool_version": "0.1.0",
+  "started_at": "2026-10-26T01:03:09.696236Z",
+  "finished_at": "2026-10-26T01:03:09.705796Z",
+  "seed": 7,
+  "config_path": "examples/ai_chat_app/secretsift.yaml",
+  "summary": {
+    "total": 8,
+    "passed": 4,
+    "failed": 4,
+    "warned": 0,
+    "errored": 0,
+    "skipped": 0,
+    "findings": 5
+  },
+  "results": [
+    {
+      "name": "prompt-leaky",
+      "category": "ai_context",
+      "status": "failed",
+      "findings": [
+        {
+          "id": "SS-CTX-001",
+          "rule_id": null,
+          "scenario": "prompt-leaky",
+          "category": "ai_context",
+          "severity": "medium",
+          "action": "deny",
+          "expected": "customer_email (synthetic_email) must not reach ai_request",
+          "observed": "customer_email observed in ai_request via provider.safe_ai",
+          "component": "provider.safe_ai",
+          "location": null,
+          "destination": "ai_request",
+          "data_type": "synthetic_email",
+          "value_id": "sv_993f8a67",
+          "variant": "raw",
+          "evidence": "user: Customer [REDACTED:sv_993f8a67] asks: Where is my order?",
+          "detection_method": "ai_requests",
+          "confidence": "exact",
+          "remediation": "Remove sensitive values from prompts and context sent to the AI provider.",
+          "event_id": "ev_87ea50cb84",
+          "occurrences": 1,
+          "review_status": null
+        }
+      ],
+      "events_observed": 4,
+      "duration_ms": 1.812,
+      "error": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "prompt-fixed",
+      "category": "ai_context",
+      "status": "passed",
+      "findings": [],
+      "events_observed": 4,
+      "duration_ms": 0.953,
+      "error": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "echo-leaky",
+      "category": "response",
+      "status": "failed",
+      "findings": [
+        {
+          "id": "SS-RSP-001",
+          "rule_id": null,
+          "scenario": "echo-leaky",
+          "category": "response",
+          "severity": "medium",
+          "action": "deny",
+          "expected": "customer_email (synthetic_email) must not reach ai_output",
+          "observed": "customer_email observed in ai_output via provider.echo_ai",
+          "component": "provider.echo_ai",
+          "location": null,
+          "destination": "ai_output",
+          "data_type": "synthetic_email",
+          "value_id": "sv_1b5e76b6",
+          "variant": "raw",
+          "evidence": "Where is my order? (account: [REDACTED:sv_1b5e76b6])",
+          "detection_method": "ai_outputs",
+          "confidence": "exact",
+          "remediation": "Prevent the model output or response from echoing sensitive values; filter it first.",
+          "event_id": "ev_f037f9bd67",
+          "occurrences": 1,
+          "review_status": null
+        }
+      ],
+      "events_observed": 4,
+      "duration_ms": 0.772,
+      "error": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "echo-fixed",
+      "category": "response",
+      "status": "passed",
+      "findings": [],
+      "events_observed": 4,
+      "duration_ms": 0.611,
+      "error": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "error-leaky",
+      "category": "response",
+      "status": "failed",
+      "findings": [
+        {
+          "id": "SS-LOG-001",
+          "rule_id": null,
+          "scenario": "error-leaky",
+          "category": "logging",
+          "severity": "medium",
+          "action": "deny",
+          "expected": "customer_email (synthetic_email) must not reach error_report",
+          "observed": "customer_email observed in error_report via provider.error_ai",
+          "component": "provider.error_ai",
+          "location": null,
+          "destination": "error_report",
+          "data_type": "synthetic_email",
+          "value_id": "sv_3ec6dd27",
+          "variant": "raw",
+          "evidence": "...ing: user: Where is my order? (account: [REDACTED:sv_3ec6dd27])",
+          "detection_method": "errors",
+          "confidence": "exact",
+          "remediation": "Redact sensitive values from exception messages and tracebacks before they are raised.",
+          "event_id": "ev_f06b7f998c",
+          "occurrences": 1,
+          "review_status": null
+        },
+        {
+          "id": "SS-LOG-002",
+          "rule_id": null,
+          "scenario": "error-leaky",
+          "category": "logging",
+          "severity": "medium",
+          "action": "deny",
+          "expected": "customer_email (synthetic_email) must not reach error_report",
+          "observed": "customer_email observed in error_report via app.exception",
+          "component": "app.exception",
+          "location": null,
+          "destination": "error_report",
+          "data_type": "synthetic_email",
+          "value_id": "sv_3ec6dd27",
+          "variant": "raw",
+          "evidence": "...ing: user: Where is my order? (account: [REDACTED:sv_3ec6dd27])\\nTraceback (most recent call last):\\n  F...",
+          "detection_method": "errors",
+          "confidence": "exact",
+          "remediation": "Redact sensitive values from exception messages and tracebacks before they are raised.",
+          "event_id": "ev_65592757cb",
+          "occurrences": 1,
+          "review_status": null
+        }
+      ],
+      "events_observed": 5,
+      "duration_ms": 2.427,
+      "error": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "error-fixed",
+      "category": "response",
+      "status": "passed",
+      "findings": [],
+      "events_observed": 5,
+      "duration_ms": 1.061,
+      "error": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "stream-leaky",
+      "category": "response",
+      "status": "failed",
+      "findings": [
+        {
+          "id": "SS-RSP-001",
+          "rule_id": null,
+          "scenario": "stream-leaky",
+          "category": "response",
+          "severity": "medium",
+          "action": "deny",
+          "expected": "customer_email (synthetic_email) must not reach ai_output",
+          "observed": "customer_email observed in ai_output via provider.stream_ai",
+          "component": "provider.stream_ai",
+          "location": null,
+          "destination": "ai_output",
+          "data_type": "synthetic_email",
+          "value_id": "sv_bb80c1d5",
+          "variant": "raw",
+          "evidence": "Where is my order? (account: [REDACTED:sv_bb80c1d5])",
+          "detection_method": "ai_outputs",
+          "confidence": "exact",
+          "remediation": "Prevent the model output or response from echoing sensitive values; filter it first.",
+          "event_id": "ev_3893953b9c",
+          "occurrences": 1,
+          "review_status": null
+        }
+      ],
+      "events_observed": 18,
+      "duration_ms": 1.048,
+      "error": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "stream-fixed",
+      "category": "response",
+      "status": "passed",
+      "findings": [],
+      "events_observed": 8,
+      "duration_ms": 0.674,
+      "error": null,
+      "skipped_reason": null
+    }
+  ],
+  "coverage": {
+    "inspectors_active": [
+      "logs",
+      "errors",
+      "http",
+      "ai_requests",
+      "ai_outputs",
+      "storage"
+    ],
+    "destinations_observed": [
+      "error_report",
+      "ai_request",
+      "ai_output",
+      "approved_test_input"
+    ],
+    "offline": true,
+    "limitations": [
+      "Only instrumented channels are observed: logging, stdout/stderr, http.client traffic, sockets, wrapped AI providers and explicitly configured storage paths.",
+      "Uninstrumented services, subprocesses and other processes are not observed.",
+      "Kernel-level and non-Python network traffic is not seen.",
+      "When offline is false, hosted AI providers receive the synthetic test data.",
+      "Detection is exact plus the listed encoding variants only; other transformations of a value are not detected."
+    ]
+  }
+}

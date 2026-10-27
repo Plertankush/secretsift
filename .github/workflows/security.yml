@@ -1,0 +1,51 @@
+name: security
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "17 4 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pip-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install project and pip-audit
+        run: python -m pip install -e ".[dev]" pip-audit
+      - name: Audit installed dependencies
+        run: python -m pip_audit
+
+  secret-patterns:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scan for key-shaped strings
+        shell: bash
+        run: |
+          # tests/ and docs/ hold synthetic examples; .github/ holds these patterns themselves.
+          # Any other line containing a key-shaped string fails the build unless it says "synthetic".
+          pattern='sk-[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{36,}|AIza[0-9A-Za-z_-]{35}|-----BEGIN [A-Z ]*PRIVATE KEY-----'
+          hits=$(grep -rEn --binary-files=without-match \
+            --exclude-dir=.git --exclude-dir=tests --exclude-dir=docs --exclude-dir=.github \
+            --exclude-dir=.venv --exclude-dir=node_modules \
+            -e "$pattern" . | grep -vi 'synthetic' || true)
+          if [ -n "$hits" ]; then
+            echo "Key-shaped strings found (values hidden):"
+            echo "$hits" | cut -d: -f1,2 | sort -u
+            exit 1
+          fi
+          echo "No key-shaped strings found."

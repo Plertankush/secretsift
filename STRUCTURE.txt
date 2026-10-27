@@ -1,0 +1,288 @@
+SECRETSIFT - PROJECT STRUCTURE
+=============================
+
+One-line summary
+  secretsift plants FAKE ("synthetic") secrets into your app, runs your code, watches every place
+  the secret could show up (logs, stdout, errors, HTTP, AI prompts, AI answers, files), checks
+  each sighting against YOUR policy, and writes a report (terminal / HTML / JSON / JUnit).
+  It runs locally. No server, no account, no frontend needed.
+
+Numbers (generated from the real tree)
+  Total files (excluding caches): 170
+  Python lines of code, src + tests + examples: 11528
+  Runtime dependencies: pydantic, pyyaml (nothing else). httpx and pytest are optional.
+
+How a run works (read this first)
+  1. secretsift.yaml            you describe: fake values, policy rules, scenarios (a Python function to call)
+  2. config.py                 loads + validates the YAML (yaml.safe_load only)
+  3. synthetic/generator.py    makes deterministic fake secrets (fake key, email, token ...)
+  4. core/runner.py            for each scenario: fresh registry + event collector, then
+  5. instrumentation/          switches on capture: logging, stdout/stderr, http.client, socket guard
+  6.   your function runs      (optionally with a provider: mock / Ollama / OpenAI / Anthropic / Gemini ...)
+  7. core/events.py            every observation becomes an Event (raw text stays in memory only)
+  8. inspectors/               look for the fake secret in each event (raw + encoded variants)
+  9. policies/                 decide ALLOW / WARN / DENY for each sighting (detection is not violation)
+ 10. core/analysis.py          turns DENY/WARN into Findings (deduplicated, with redacted evidence)
+ 11. reporting/                writes terminal, JSON, HTML (self-contained), JUnit XML
+ 12. cli.py                    exit code: 0 clean, 1 findings, 2 scenario errors only, 3 bad config/usage
+
+Who does what (by package, under src/secretsift/)
+  models.py            all shared data types (Event, Finding, Report ...). Raw secrets are never serialized.
+  contracts.py         abstract interfaces (Inspector, Reporter, registry protocol)
+  exceptions.py        error types; messages never contain secrets
+  config.py            YAML config models + loader + starter config
+  cli.py, __main__.py  the `secretsift` command (init, doctor, providers, validate, test, report, diff, demo, version)
+  api.py               Python SDK: `with Drill() as d:` for use inside your own tests
+  demo.py              built-in intentionally leaky / safe example functions
+  synthetic/           fake value generation, secret registry, encoded-variant matching
+  evidence/            redaction of evidence snippets and credentials
+  instrumentation/     capture + guards (this is what "sees" the data)
+  inspectors/          per-channel matchers (logs, errors, http, ai requests, ai outputs, storage)
+  policies/            rule schema, compiler, evaluator, remediation hints
+  core/                scenario spec, runner, analysis, lifecycle (cleanup), run context, event collector
+  providers/           AI adapters + mock provider + instrumented wrapper (records prompts/answers)
+  assertions/          assert_no_findings, baseline comparison (regressions)
+  reporting/           terminal, JSON, HTML, JUnit, report diff, safe file writing (0600, atomic)
+  integrations/        pytest plugin (fixture `secretsift`), optional httpx transport
+
+Is there AI inside secretsift?
+  No. Detection is deterministic: exact match plus listed encodings. AI apps are the thing being
+  TESTED. AI providers are only adapters to send prompts. Everything works offline with the mock provider.
+  Fixing a leak = editing your own application code at the component/location the finding names.
+  secretsift gives static remediation hints; it does not rewrite your code.
+
+How to extend (who can add what)
+  New AI provider      subclass providers/base.py Provider, register in providers/registry.py
+  New leak channel     subclass contracts.Inspector, add to inspectors/__init__.py default_inspectors()
+  New policy           edit YAML only (policy.rules)
+  New scenario         write a Python callable, reference it as "module:function" in YAML
+  New report format    implement contracts.Reporter, register in reporting/__init__.py
+  Use inside tests     api.Drill (any test framework) or the pytest fixture
+
+Where things live outside src/
+  tests/        unit/ (per package), integration/ (end to end + examples), security/ (redaction, escaping, offline guard)
+  examples/     runnable examples, intentionally leaky + fixed versions
+  docs/         DESIGN.md (binding design contract) and reference docs
+  scripts/      verify.sh: one command that runs every check (tests, pytest plugin, lint, build, CLI, examples)
+  .github/      CI workflows (tests, lint, typecheck, security), issue/PR templates
+
+Run the tests (no pytest required)
+  PYTHONPATH=src python3 -m unittest discover -s tests -t . -q
+
+Full tree (one line per file, taken from each module's own docstring)
+------------------------------------------------------------------
+secretsift/
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── bug_report.yml
+│   │   ├── config.yml
+│   │   └── feature_request.yml
+│   ├── workflows/
+│   │   ├── lint.yml
+│   │   ├── security.yml
+│   │   ├── tests.yml
+│   │   └── typecheck.yml
+│   ├── dependabot.yml
+│   └── pull_request_template.md
+├── docs/
+│   ├── images/
+│   │   ├── report-preview-1.png
+│   │   ├── report-preview-2.png
+│   │   ├── report-preview-3.png
+│   │   └── report-preview-full.png
+│   ├── sample/
+│   │   ├── ai-chat-report.html
+│   │   └── ai-chat-report.json
+│   ├── DESIGN.md
+│   ├── architecture.md
+│   ├── installation.md
+│   └── quickstart.md
+├── examples/
+│   ├── ai_chat_app/
+│   │   ├── README.md  - developer guide: install, quickstart, commands, reports, status
+│   │   ├── chat_app.py  - AI-chat example. Intentionally leaky code: only ever call it with synthetic data.
+│   │   └── secretsift.yaml
+│   ├── basic_python/
+│   │   ├── README.md  - developer guide: install, quickstart, commands, reports, status
+│   │   ├── my_app.py  - Basic SDK example. Intentionally leaky code: only ever call it with synthetic data.
+│   │   └── test_my_app_privacy.py  - Drill SDK example with plain unittest (pytest runs it too).
+│   ├── ci_pipeline/
+│   │   ├── README.md  - developer guide: install, quickstart, commands, reports, status
+│   │   ├── github-actions.yml
+│   │   └── secretsift.yaml
+│   ├── hosted_api/
+│   │   ├── README.md  - developer guide: install, quickstart, commands, reports, status
+│   │   └── secretsift.yaml
+│   ├── http_leak/
+│   │   ├── README.md  - developer guide: install, quickstart, commands, reports, status
+│   │   ├── http_leak_app.py  - HTTP-leak example. Intentionally leaky code: only ever call it with synthetic data.
+│   │   └── secretsift.yaml
+│   ├── local_model/
+│   │   ├── README.md  - developer guide: install, quickstart, commands, reports, status
+│   │   └── secretsift.yaml
+│   ├── log_leak/
+│   │   ├── README.md  - developer guide: install, quickstart, commands, reports, status
+│   │   ├── log_leak_app.py  - Log-leak example. Intentionally leaky code: only ever call it with synthetic data.
+│   │   └── secretsift.yaml
+│   └── README.md  - developer guide: install, quickstart, commands, reports, status
+├── scripts/
+│   └── verify.sh
+├── src/
+│   └── secretsift/
+│       ├── assertions/
+│       │   ├── __init__.py  - Public assertion helpers.
+│       │   ├── privacy.py  - Assertion helper for tests that must not leak synthetic data.
+│       │   └── regression.py  - Baseline comparison between two reports.
+│       ├── core/
+│       │   ├── __init__.py
+│       │   ├── analysis.py  - Turns observed events into policy-evaluated findings. Raw values never leave this module.
+│       │   ├── context.py  - Per-scenario run state shared between the runner, instrumentation and analysis.
+│       │   ├── events.py  - Thread-safe in-memory event collector used by all instrumentation.
+│       │   ├── lifecycle.py  - Guaranteed-cleanup context manager for one scenario run.
+│       │   ├── runner.py  - Scenario runner: plants synthetic values, runs targets under instrumentation, reports.
+│       │   └── scenario.py  - Scenario specification and ``{{ label }}`` input templating.
+│       ├── evidence/
+│       │   ├── __init__.py  - Redacted evidence helpers.
+│       │   └── redaction.py  - Redacted evidence snippets and credential masking. Never emits a registered value.
+│       ├── inspectors/
+│       │   ├── __init__.py  - Inspectors that look for synthetic values in observed events.
+│       │   ├── ai_outputs.py  - Finds synthetic values in model outputs, including streamed responses.
+│       │   ├── ai_requests.py  - Finds synthetic values in prompts and context sent to an AI model.
+│       │   ├── base.py  - Shared base class for inspectors that search an event payload with the secret registry.
+│       │   ├── errors.py  - Finds synthetic values in error reports and exception text.
+│       │   ├── http.py  - Finds synthetic values in outbound HTTP request URLs, headers and bodies.
+│       │   ├── logs.py  - Finds synthetic values in captured application logs and stdout/stderr.
+│       │   └── storage.py  - Finds synthetic values persisted to explicit storage paths or caches.
+│       ├── instrumentation/
+│       │   ├── __init__.py  - Runtime instrumentation: logs, stdio, HTTP, sockets and storage observation.
+│       │   ├── capture.py  - The :class:`Instrumentation` context manager and its process-global patch bookkeeping.
+│       │   ├── httpguard.py  - ``http.client`` guard: emits url/headers/body events and enforces the network policy.
+│       │   ├── logcapture.py  - Root-logger handler that records log output as ``application_logs`` events.
+│       │   ├── sockets.py  - Network policy helpers and the process-global socket guard.
+│       │   ├── stdio.py  - stdout/stderr tee: records complete lines while forwarding to the real stream.
+│       │   └── storage.py  - Explicit-path storage scanning and an in-memory adapter. Never walks outside given roots.
+│       ├── integrations/
+│       │   ├── __init__.py  - Optional integrations with third-party HTTP clients (imported lazily).
+│       │   ├── httpx_transport.py  - httpx transport wrapper that observes and polices outbound requests.
+│       │   └── pytest_plugin.py  - pytest plugin: a ``secretsift`` fixture that fails the test when data leaks.
+│       ├── policies/
+│       │   ├── __init__.py  - Policy engine: schema, compiler and evaluator.
+│       │   ├── evaluator.py  - Policy decision engine.
+│       │   ├── loader.py  - Compile a declarative policy into a validated evaluator.
+│       │   ├── rules.py  - Remediation hints per destination.
+│       │   └── schema.py  - Declarative policy models (as written in the YAML ``policy:`` section).
+│       ├── providers/
+│       │   ├── __init__.py  - AI provider adapters (mock, OpenAI-compatible, Ollama, llama.cpp, OpenAI, Anthropic, Gemini).
+│       │   ├── anthropic.py  - Anthropic Messages adapter (``POST {base_url}/messages``).
+│       │   ├── base.py  - Provider data models, the abstract :class:`Provider` and a shared HTTP adapter base.
+│       │   ├── gemini.py  - Gemini adapter (``generateContent`` / ``streamGenerateContent?alt=sse``).
+│       │   ├── instrumented.py  - Provider wrapper that records every request, output and error as secretsift events.
+│       │   ├── llama_cpp.py  - llama.cpp server adapter (OpenAI-compatible ``/v1/chat/completions``, no key).
+│       │   ├── mock.py  - Deterministic offline provider for rehearsing leaks without any network.
+│       │   ├── ollama.py  - Ollama adapter (``POST {base_url}/api/chat``, NDJSON streaming, no key).
+│       │   ├── openai.py  - OpenAI adapter: the OpenAI-compatible protocol with OpenAI defaults.
+│       │   ├── openai_compatible.py  - OpenAI-compatible chat completions adapter (``POST {base_url}/chat/completions``).
+│       │   ├── registry.py  - Provider factory: build providers from a type name or a config mapping.
+│       │   └── transport.py  - HTTP transport used by every network provider adapter.
+│       ├── reporting/
+│       │   ├── __init__.py  - Report renderers (terminal, JSON, HTML, JUnit XML), diffing and safe file output.
+│       │   ├── diff.py  - Compare two reports: which findings are new, fixed or unchanged.
+│       │   ├── html_report.py  - Self-contained HTML report: inline CSS and SVG, no scripts, no external resources.
+│       │   ├── json_report.py  - JSON report: stable schema ``secretsift-report/1`` with strict loading.
+│       │   ├── junit.py  - JUnit XML reporter: one testsuite per run, one testcase per scenario.
+│       │   ├── safe_io.py  - Safe text handling and file writing shared by every reporter.
+│       │   └── terminal.py  - Plain-text terminal reporter with optional ANSI colors. Pure stdlib.
+│       ├── synthetic/
+│       │   ├── __init__.py  - Synthetic secret generation, registry and variant matching.
+│       │   ├── fixtures.py  - Helpers to build sets of synthetic values.
+│       │   ├── generator.py  - Deterministic, format-preserving synthetic value generation.
+│       │   ├── markers.py  - Marker and deterministic byte-stream helpers (HMAC-SHA256 based, no global RNG state).
+│       │   ├── normalize.py  - Pure variant-building functions: every encoding a value may take inside a payload.
+│       │   └── registry.py  - Thread-safe registry of active synthetic values with variant-aware search.
+│       ├── __init__.py  - secretsift: local-first privacy leak rehearsal for AI-powered applications.
+│       ├── __main__.py  - ``python -m secretsift`` entry point.
+│       ├── api.py  - Python SDK: use secretsift inside any test code without a YAML config.
+│       ├── cli.py  - Command-line interface (argparse only). Exit codes: 0 clean, 1 findings, 2 scenario errors
+│       ├── config.py  - Configuration models, YAML loading, validation and the starter config.
+│       ├── contracts.py  - Abstract interfaces between modules. Implementations live in their own packages.
+│       ├── demo.py  - Intentionally leaky and safe demo targets for secretsift's starter config and tests.
+│       ├── exceptions.py  - Exception hierarchy. Messages must never contain raw synthetic values or credentials.
+│       ├── models.py  - Shared typed data model. Every module codes against these types.
+│       ├── py.typed
+│       └── version.py
+├── tests/
+│   ├── integration/
+│   │   ├── __init__.py
+│   │   ├── test_examples.py  - Runs every offline example in-process and asserts the outcomes its README documents.
+│   │   └── test_runner_e2e.py  - End-to-end tests: YAML config -> run_config -> Report, against real instrumentation.
+│   ├── security/
+│   │   ├── __init__.py
+│   │   ├── test_offline_guard.py  - Offline guard security properties.
+│   │   ├── test_redaction_security.py  - Security properties: values never leak through evidence, repr, errors or redaction.
+│   │   └── test_report_escaping.py  - Hostile strings in every report field must not break out of any output format.
+│   ├── unit/
+│   │   ├── api/
+│   │   │   ├── __init__.py
+│   │   │   └── test_drill.py  - Tests for the ``Drill`` SDK.
+│   │   ├── assertions/
+│   │   │   ├── __init__.py
+│   │   │   └── test_assertions.py
+│   │   ├── cli/
+│   │   │   ├── __init__.py
+│   │   │   └── test_cli.py  - CLI tests: call ``cli.main`` in-process inside a temporary working directory.
+│   │   ├── config/
+│   │   │   ├── __init__.py
+│   │   │   └── test_config.py  - Config loading, templating and starter-config tests.
+│   │   ├── core/
+│   │   │   ├── __init__.py
+│   │   │   ├── test_analysis.py
+│   │   │   └── test_lifecycle.py
+│   │   ├── evidence/
+│   │   │   ├── __init__.py
+│   │   │   └── test_redaction.py  - build_evidence, redact_text and redact_credentials.
+│   │   ├── inspectors/
+│   │   │   ├── __init__.py
+│   │   │   ├── test_end_to_end.py  - Instrumentation -> default_inspectors end to end (logs, stdout, local HTTP request).
+│   │   │   └── test_inspectors.py  - Inspector tests using the real SecretRegistry and generator.
+│   │   ├── instrumentation/
+│   │   │   ├── __init__.py
+│   │   │   ├── test_capture.py  - Instrumentation against a real local HTTP server.
+│   │   │   └── test_storage.py  - Storage scanner and in-memory adapter.
+│   │   ├── integrations/
+│   │   │   ├── __init__.py
+│   │   │   ├── test_httpx_transport.py  - SecretsiftTransport tests. Pure helpers and event logic run without httpx.
+│   │   │   └── test_pytest_plugin.py  - Plugin tests. The fixture logic runs against a minimal fake ``pytest`` module so it is
+│   │   ├── policies/
+│   │   │   ├── __init__.py
+│   │   │   └── test_policies.py  - Policy compilation and evaluation tests.
+│   │   ├── providers/
+│   │   │   ├── __init__.py
+│   │   │   ├── fakes.py  - Test doubles shared by the provider tests.
+│   │   │   ├── test_adapters.py  - Adapter wire-format tests (FakeTransport only; no network).
+│   │   │   └── test_transport.py  - UrllibTransport against a local 127.0.0.1 server, plus parser unit tests.
+│   │   ├── reporting/
+│   │   │   ├── __init__.py
+│   │   │   ├── _fixtures.py  - Report fixtures shared by the reporting tests.
+│   │   │   ├── test_diff.py
+│   │   │   ├── test_html.py
+│   │   │   ├── test_json.py
+│   │   │   ├── test_junit.py
+│   │   │   ├── test_safe_io.py
+│   │   │   └── test_terminal.py
+│   │   ├── synthetic/
+│   │   │   ├── __init__.py
+│   │   │   ├── test_generator.py  - Generator, markers and fixtures.
+│   │   │   ├── test_normalize.py  - Pure variant builders.
+│   │   │   └── test_registry.py  - SecretRegistry: variants, offsets, redaction, performance, threads.
+│   │   └── __init__.py
+│   └── __init__.py
+├── .editorconfig  - editor formatting rules
+├── .gitignore  - ignored files (reports, venvs, .env)
+├── CHANGELOG.md  - release notes
+├── CODE_OF_CONDUCT.md  - community rules
+├── CONTRIBUTING.md  - how to develop and send changes
+├── LICENSE  - Apache-2.0
+├── README.md  - developer guide: install, quickstart, commands, reports, status
+├── SECURITY.md  - threat model + private vulnerability reporting
+├── STRUCTURE.txt  - this file
+└── pyproject.toml  - package metadata, CLI entry point (leakdrill), pytest plugin entry point, ruff/mypy config

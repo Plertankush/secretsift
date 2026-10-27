@@ -1,0 +1,30 @@
+name: Feature request
+description: Propose an improvement or new capability.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What leak or workflow are you unable to test today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Project constraints
+      options:
+        - label: I understand runtime dependencies are limited to pydantic and pyyaml.
+          required: true
+        - label: I understand secretsift only tests software you own, using synthetic data.
+          required: true
