@@ -169,7 +169,9 @@ class ConfigOnlyExampleTest(unittest.TestCase):
 
 class BasicPythonExampleTest(unittest.TestCase):
     def test_example_unittests_pass(self) -> None:
-        suite = unittest.defaultTestLoader.discover(str(EXAMPLES / "basic_python"))
+        suite = unittest.defaultTestLoader.discover(
+            str(EXAMPLES / "basic_python"), top_level_dir=str(EXAMPLES / "basic_python")
+        )
         out = io.StringIO()
         with contextlib.redirect_stdout(io.StringIO()):
             result = unittest.TextTestRunner(stream=out, verbosity=0).run(suite)

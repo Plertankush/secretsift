@@ -35,6 +35,7 @@ class WriteTests(unittest.TestCase):
         self.addCleanup(self._tmp.cleanup)
         self.root = Path(self._tmp.name)
 
+    @unittest.skipIf(os.name == "nt", "POSIX file modes do not exist on Windows")
     def test_creates_parents_with_mode_600(self) -> None:
         target = self.root / "a" / "b" / "r.json"
         out = write_report(make_report(), "json", target)
@@ -49,6 +50,7 @@ class WriteTests(unittest.TestCase):
         self.assertEqual(target.read_text(), "two")
         self.assertEqual([p.name for p in self.root.iterdir()], ["r.txt"])
 
+    @unittest.skipIf(os.name == "nt", "POSIX file modes do not exist on Windows")
     def test_overwrite_resets_loose_mode(self) -> None:
         target = self.root / "r.txt"
         target.write_text("x")

@@ -82,6 +82,7 @@ class ValidateTests(CliCase):
 
 
 class TestCommandTests(CliCase):
+    @unittest.skipIf(os.name == "nt", "POSIX file modes do not exist on Windows")
     def test_starter_config_finds_leak_and_writes_private_files(self) -> None:
         self.init_config()
         code, out, err = self.run_cli("test", "--no-color")
@@ -164,6 +165,7 @@ class ReportAndDiffTests(CliCase):
         self.run_cli("test", "--report", "json", "--output-dir", name, *extra)
         return f"{name}/secretsift-report.json"
 
+    @unittest.skipIf(os.name == "nt", "POSIX file modes do not exist on Windows")
     def test_round_trip_conversion(self) -> None:
         src = self.make_json("a")
         cases = (("html", "<html"), ("junit", "<testsuite"), ("terminal", "leaky-login"))

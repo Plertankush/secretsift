@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -127,6 +128,7 @@ class DrillTests(unittest.TestCase):
         with self.assertRaises(ConfigError):
             Drill().to_report()
 
+    @unittest.skipIf(os.name == "nt", "POSIX file modes do not exist on Windows")
     def test_report_to_file_is_private_and_deterministic_seed(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             with Drill(seed=3) as d1:
